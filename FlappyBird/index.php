@@ -136,14 +136,50 @@ if (isset($_GET["logout"])) {
     <section class="container w-auto p-3">
         <h2 class="p-3 font-weight-bold">Popis programu</h2>
         <p class="pecko">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae voluptatibus nesciunt illum fugiat hic quis dignissimos doloribus, non quaerat vel est, animi eius dolorum, optio nam itaque unde fuga rerum cupiditate similique ipsa dolor. Nesciunt a at vitae quasi illo deleniti aliquam et, reiciendis soluta fugiat, ex ducimus error mollitia consequuntur hic rerum nostrum, exercitationem qui beatae non molestias! Dolorum delectus nobis ea iure at autem, repellendus expedita eos ipsum minus. Voluptate, doloribus? Aliquid recusandae aspernatur ab, consectetur nam doloremque totam eaque placeat, fuga assumenda officia, obcaecati nobis natus eligendi. Vitae voluptatum beatae cum voluptates eaque est tempore pariatur culpa, autem odio accusantium at similique quod voluptas doloribus placeat dolore quis minima quibusdam debitis blanditiis eius voluptate corporis aliquid. Sit aut dicta eveniet veritatis ipsa nulla maiores. Tempore nobis itaque rerum, asperiores doloribus maxime in, accusantium ab odio dolorem saepe eius modi enim reprehenderit? Nesciunt harum quis corrupti consequuntur, minima enim alias officia sint quibusdam id deleniti numquam sed magni voluptas cumque, repellendus laboriosam esse in nobis libero quaerat inventore dicta excepturi nostrum! Molestias placeat recusandae in quis neque similique dicta sint magni eaque error sapiente, ratione facere porro laborum deserunt dolores minus voluptatibus, sit odit modi ad voluptates maiores?
-        </p>
+ <h3>Kroky programu:</h3>
+ Tento program je klon hry Flappy Bird vytvořený v Pythonu s využitím Pygame. Hráč ovládá ptáčka, který musí prolétávat mezi trubkami – skáče stiskem mezerníku a hra končí při kolizi. Skóre se ukládá do souboru i databáze. Trubky se generují s náhodnou výškou, skóre se aktualizuje při úspěšném průletu a nejvyšší skóre se uchovává. Herní logika zahrnuje pohyb, kolize, animace a menu pro zadání jména hráče. Každý hráč (1AUsers) může mít více skóre záznamů (1AScores), což odpovídá vztahu 1:N
+    <p></p>
+    <p><strong>1. Inicializace:</strong></p>
+    <p>- Načtení knihoven</p>
+    <p>- Nastavení herního okna, obrázků a proměnných</p>
+
+    <p><strong>2. Připojení k databázi MariaDB a vytvoření tabulek:</strong></p>
+    <p>- `1AUsers` (uživatelé) s primárním klíčem `user_id`</p>
+    <p>- `1AScores` (skóre), kde `user_id` je cizí klíč (vztah 1:N)</p>
+
+    <p><strong>3. Funkce hlavního menu:</strong></p>
+    <p>- Požádá hráče o zadání jména</p>
+    <p>- Pokud uživatel existuje, načte jeho ID a nejvyšší skóre</p>
+    <p>- Jinak přidá nového uživatele do databáze</p>
+
+    <p><strong>4. Herní smyčka:</strong></p>
+    <p>- Pokud hráč stiskne MEZERNÍK: nastaví směr ptáka nahoru</p>
+    <p>- Jinak postupně zvýší pádovou rychlost ptáka vlivem gravitace a posune ho směrem dolů.</p>
+    <p>- Posun překážek doleva</p>
+    <p>- Pokud pták narazí na překážku nebo podlahu:</p>
+    <p>  - Nastaví stav **Game Over**</p>
+    <p>  - Zkontroluje, zda je skóre vyšší než uložené skóre v databázi</p>
+    <p>  - Pokud ano, **uloží nové skóre do databáze**</p>
+
+    <p><strong>5. Funkce pro zápis skóre do databáze:</strong></p>
+    <p>- Pokud hráč porazil své nejvyšší skóre:</p>
+    <p>  - Aktualizuje hodnotu ve `1AScores` pro daného `user_id`</p>
+    <p>  - Pokud uživatel neměl žádné skóre, vloží nový záznam</p>
+
+    <p><strong>6. Konec hry:</strong></p>
+    <p>- Zobrazí výsledné skóre a umožní restart hry nebo ukončení aplikace</p>
     </section>
     <hr>
+
     <section class="container w-auto p-4">
-        <h2 class="p-3 font-weight-bold">Požitý algoritmy a knihovny</h2>
+        <h2 class="p-3 font-weight-bold">Použitý algoritmy a knihovny</h2>
         <p class="pecko">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor consectetur labore harum autem nam facilis laboriosam et, aspernatur corporis rerum obcaecati qui assumenda in ipsam veritatis ducimus quaerat dolorum natus libero iusto atque nemo molestias! Animi quas delectus perferendis tempore mollitia assumenda modi laboriosam veniam. Eligendi sed maxime soluta dolore asperiores, aperiam delectus, repellat est ea commodi accusantium laudantium suscipit, consequuntur deserunt odit explicabo in molestiae odio harum eius. Eveniet, exercitationem est accusamus a et quaerat obcaecati voluptatum earum, nam deleniti, consequatur error esse praesentium perferendis odio temporibus soluta voluptas officia dolor inventore facilis! Dolores assumenda harum saepe voluptate eligendi porro ut illum tempora adipisci. A expedita quidem officia quisquam, nobis dolorem cum, atque sequi officiis illum eum, tenetur vel! Itaque maxime dicta rerum velit praesentium explicabo similique provident iusto.
+    <p>pygame – Knihovna pro tvorbu 2D her.</p>
+    <p>sys – Umožňuje práci se systémovými funkcemi, například ukončení programu.</p>
+    <p>time – Poskytuje funkce pro práci s časem.</p>
+    <p>random – Generování náhodných hodnot (např. výška trubek).</p>
+    <p>os – Práce se soubory a operačním systémem.</p>
+    <p>mariadb – Připojení k databázi MariaDB.</p>
         </p>
         <img src="image.png" class="mx-auto d-block img-responsive" alt="Vývojový diagram">
     </section>
@@ -158,7 +194,7 @@ if (isset($_GET["logout"])) {
     <section class="container w-auto p-4">
         <h2 class="p-3 font-weight-bold">Odkaz pro git</h2>
         <p class="pecko">
-            Všechno je uloženo na tomto Gitu: <a href="https://github.com/Pateks1/maturitniprojekt.git">zde</a>
+            Všechno je uloženo na tomto Gitu: <a href="https://github.com/Pateks1/maturitniprojekt">zde</a>
         </p>
     </section>
     
