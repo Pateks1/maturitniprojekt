@@ -158,7 +158,7 @@ if (isset($_GET["logout"])) {
     <section class="container w-auto p-4">
         <h2 class="p-3 font-weight-bold">Odkaz pro git</h2>
         <p class="pecko">
-            Všechno je uloženo na tomto Gitu: <a href="https://spsrakovnik.tech/macek.mi.2021/NaDoma/Snake/">zde</a>
+            Všechno je uloženo na tomto Gitu: <a href="https://github.com/Pateks1/maturitniprojekt.git">zde</a>
         </p>
     </section>
     
