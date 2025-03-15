@@ -127,7 +127,7 @@ try:
     print("Connected to MariaDB!")
     cursor = conn.cursor()
     cursor.execute('CREATE TABLE IF NOT EXISTS `1AUsers` (user_id INT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(255))')
-    cursor.execute('CREATE TABLE IF NOT EXISTS `1AScores` (user_id INT PRIMARY KEY, score INT, FOREIGN KEY (user_id) REFERENCES `1AUsers`(user_id) ON DELETE CASCADE ON UPDATE CASCADE)')
+    cursor.execute('CREATE TABLE IF NOT EXISTS `1AScores` (id INT PRIMARY KEY AUTO_INCREMENT, user_id INT, score INT, FOREIGN KEY (user_id) REFERENCES `1AUsers`(user_id) ON DELETE CASCADE ON UPDATE CASCADE);')
     conn.commit()
 
 except mariadb.Error as e:
@@ -135,11 +135,7 @@ except mariadb.Error as e:
 
 # Funkce pro uložení nového skóre do souboru
 def save_high_score(player_name, score):
-    if score < highest_score:
-        #print("Nepodařilo se ti porazit své nejvyšší skóre.")
-        return
     try:
-        print(f"Gratulujeme! Nové nejvyšší skóre: {score} (ID: #{userID})")
         # Načtení aktuálních skóre
         with open("high_score.txt", "r") as file:
             high_scores = file.readlines()
@@ -166,9 +162,6 @@ def save_high_score(player_name, score):
         # Ulož výsledky
         with open("high_score.txt", "w") as file:
             file.writelines(high_scores)
-
-        cursor.execute('INSERT INTO `1AScores` (user_id, score) VALUES (?, ?) ON DUPLICATE KEY UPDATE score=?', (userID,score,score)) # Vloží / aktualizuje skóre hráče
-        conn.commit()
     except FileNotFoundError:
         # Pokud soubor neexistuje, vytvoř ho
         with open("high_score.txt", "w") as file:
@@ -190,7 +183,7 @@ def update_user_id(username):
 
 def update_highest_score():
     print(f"Getting high score of user {userID}...")
-    cursor.execute('SELECT score FROM `1AScores` WHERE user_id = ?', (userID,))
+    cursor.execute('SELECT MAX(score) FROM `1AScores` WHERE user_id = ?;', (userID,))
     conn.commit()
     score = cursor.fetchone()
     if score is None:
@@ -200,6 +193,18 @@ def update_highest_score():
         highest_score = score[0]
         print(f"High score: {highest_score}")
 
+# Uloží score
+already_saved = False
+def save_score(userID, score):
+    global already_saved
+    if (score < 1):
+        return
+    if already_saved:
+        return
+    already_saved = True
+    print(f"Inserting score {score} for user {userID} into database...")
+    cursor.execute('INSERT INTO `1AScores` (user_id, score) VALUES (?, ?)', (userID,score)) # Vloží skóre hráče
+    conn.commit()
 
 # Funkce pro hlavní menu
 def main_menu():
@@ -242,8 +247,7 @@ def main_menu():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                confirm_exit()  # Vyskočí okno pro potvrzení ukončení
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:  # Stisknutí Enter pro potvrzení
@@ -337,9 +341,17 @@ while running:
             if event.key == pygame.K_SPACE and not game_over:  # Pokud je stisknutá mezerník
                 bird_movement = 0
                 bird_movement = -5
+                already_saved = False
 
             if event.key == pygame.K_SPACE and game_over:
                 # Po skončení hry se vrátí zpět do hlavního menu pro zadání nového jména
+
+                # print(f"Game over! Score: {score}")
+                # if (score > 0):
+                #     print(f"Inserting score {score} for user {userID} into database...")
+                #     cursor.execute('INSERT INTO `1AScores` (user_id, score) VALUES (?, ?)', (userID,score)) # Vloží / aktualizuje skóre hráče
+                #     conn.commit()
+
                 game_over = False
                 pipes = []
                 bird_movement = 0
@@ -372,7 +384,8 @@ while running:
         bird_rect.centery += bird_movement
         rotated_bird = pygame.transform.rotozoom(bird_img, bird_movement * -5, 1)
 
-        if bird_rect.top < 5 or bird_rect.bottom >= 490: 
+        if bird_rect.top < 5 or bird_rect.bottom >= 490:
+            save_score(userID, score)
             game_over = True  # Nastavení game_over na True při kolizi s trubkou
             main_menu()  # Po kolizi se zobrazí hlavní menu
             continue  # Aby se vše znovu inicializovalo po kolizi
@@ -383,6 +396,7 @@ while running:
         draw_score("game_on")
         
     elif game_over:
+        save_score(userID, score)
         screen.blit(over_img, over_rect)
         draw_score("game_over")
         floor_x = 0
