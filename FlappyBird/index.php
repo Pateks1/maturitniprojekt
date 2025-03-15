@@ -28,7 +28,11 @@ if (isset($_GET["logout"])) {
 }
 
     // Dotaz na získání dat
-    $sql = "SELECT 1AUsers.user_id, username, score FROM 1AUsers INNER JOIN 1AScores ON 1AUsers.user_id = 1AScores.user_id ORDER BY score DESC";
+    $sql = "SELECT u.user_id, u.username, MAX(s.score) AS score
+            FROM 1AUsers u
+            INNER JOIN 1AScores s ON u.user_id = s.user_id
+            GROUP BY u.user_id, u.username
+            ORDER BY score DESC;";
     $result = $conn->query($sql);
 
 ?>
@@ -136,7 +140,7 @@ if (isset($_GET["logout"])) {
     <section class="container w-auto p-3">
         <h2 class="p-3 font-weight-bold">Popis programu</h2>
         <p class="pecko">
- <h3>Kroky programu:</h3>
+        <h3>Kroky programu:</h3>
  Tento program je klon hry Flappy Bird vytvořený v Pythonu s využitím Pygame. Hráč ovládá ptáčka, který musí prolétávat mezi trubkami – skáče stiskem mezerníku a hra končí při kolizi. Skóre se ukládá do souboru i databáze. Trubky se generují s náhodnou výškou, skóre se aktualizuje při úspěšném průletu a nejvyšší skóre se uchovává. Herní logika zahrnuje pohyb, kolize, animace a menu pro zadání jména hráče. Každý hráč (1AUsers) může mít více skóre záznamů (1AScores), což odpovídá vztahu 1:N
     <p></p>
     <p><strong>1. Inicializace:</strong></p>
@@ -170,16 +174,16 @@ if (isset($_GET["logout"])) {
     <p>- Zobrazí výsledné skóre a umožní restart hry nebo ukončení aplikace</p>
     </section>
     <hr>
-
+    
     <section class="container w-auto p-4">
-        <h2 class="p-3 font-weight-bold">Použitý algoritmy a knihovny</h2>
+        <h2 class="p-3 font-weight-bold">Požitý algoritmy a knihovny</h2>
         <p class="pecko">
     <p>pygame – Knihovna pro tvorbu 2D her.</p>
     <p>sys – Umožňuje práci se systémovými funkcemi, například ukončení programu.</p>
     <p>time – Poskytuje funkce pro práci s časem.</p>
     <p>random – Generování náhodných hodnot (např. výška trubek).</p>
     <p>os – Práce se soubory a operačním systémem.</p>
-    <p>mariadb – Připojení k databázi MariaDB.</p>
+    <p>mariadb – Připojení k databázi MariaDB.</p>        
         </p>
         <img src="image.png" class="mx-auto d-block img-responsive" alt="Vývojový diagram">
     </section>
@@ -187,7 +191,7 @@ if (isset($_GET["logout"])) {
     <section class="container w-auto p-4">
         <h2 class="p-3 font-weight-bold">Seznam autorů</h2>
         <p class="pecko">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, dolor, maiores perferendis iusto repellat incidunt porro consequatur beatae itaque pariatur unde nemo architecto aliquam ad. Ipsa soluta necessitatibus reiciendis atque.
+            Štěpán Pátek
         </p>
     </section>
     <hr>
