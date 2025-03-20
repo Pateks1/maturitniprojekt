@@ -1,0 +1,10 @@
+Jujky: 8
+vasek: 7
+poi: 6
+Tlacenka: 5
+Wupin: 3
+Hmm: 3
+MacaTchuj: 3
+Uu: 2
+Seru: 2
+GameOver: 2
