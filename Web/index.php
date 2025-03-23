@@ -176,7 +176,7 @@ if (isset($_GET["logout"])) {
     <hr>
     
     <section class="container w-auto p-4">
-        <h2 class="p-3 font-weight-bold">Požitý algoritmy a knihovny</h2>
+        <h2 class="p-3 font-weight-bold">Použité knihovny</h2>
         <p class="pecko">
     <p>pygame – Knihovna pro tvorbu 2D her.</p>
     <p>sys – Umožňuje práci se systémovými funkcemi, například ukončení programu.</p>
@@ -184,8 +184,17 @@ if (isset($_GET["logout"])) {
     <p>random – Generování náhodných hodnot (např. výška trubek).</p>
     <p>os – Práce se soubory a operačním systémem.</p>
     <p>mariadb – Připojení k databázi MariaDB.</p>        
-        </p>
+    </section>
+    <hr>
+
+    <section class="container w-auto p-5">
+        <h2 class="p-3 font-weight-bold">Vývojový diagram, ER diagram</h2>
+        <p class="pecko">
         <img src="image.png" class="mx-auto d-block img-responsive" alt="Vývojový diagram">
+        <p>
+        <p>
+        <img src="erdiagram.png" class="mx-auto d-block img-responsive" alt="ER diagram" width="350" height="auto">
+        </p>
     </section>
     <hr>
     <section class="container w-auto p-4">
